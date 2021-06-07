@@ -67,20 +67,20 @@ const getRandomArray = (array) => {
 };
 
 const createAdvertisement = () => {
-  const LOCATION = {
+  const location = {
     lat: randomCoords(35.65, 35.7, 4),
     lng: randomCoords(139.7, 139.8, 4),
   };
 
-  const getLocation = (location) => `${location.lat}, ${location.lng}`;
+  const getLocation = (coords) => `${coords.lat}, ${coords.lng}`;
 
-  const AUTHOR = {
+  const author = {
     avatar: `img/avatars/user0${randomInt(1, 8)}.png`,
   };
 
-  const OFFER = {
+  const offer = {
     title: 'Самые бронируемые апартаменты/квартиры в этом месяце',
-    address: getLocation(LOCATION),
+    address: getLocation(location),
     price: randomInt(1, Number.MAX_SAFE_INTEGER),
     type: getRandomArrayElement(TYPE_OF_LIVING_ACCOMODATION),
     rooms: randomInt(1, Number.MAX_SAFE_INTEGER),
@@ -91,12 +91,12 @@ const createAdvertisement = () => {
     description: 'Космополитический 5-звездочный отель Pullman Dubai Downtown расположен в районе Бизнес-Бэй, недалеко от небоскреба Бурдж-Халифа, торгового центра Dubai Mall и района Даунтаун-Дубай.',
     photos: getRandomArray(PHOTOS),
   };
-  return { AUTHOR, LOCATION, OFFER };
+  return { author, location, offer };
 };
-const similarAdvertisement = new Array(COUNT_OF_ADVERTISEMENT).fill(null).map(() => createAdvertisement());
+const similarAdvertisements = new Array(COUNT_OF_ADVERTISEMENT).fill(null).map(() => createAdvertisement());
 
 const zaglushka = function () {
-  return similarAdvertisement;
+  return similarAdvertisements;
 };
 
 zaglushka();
