@@ -1,3 +1,3 @@
-import { similarAdvertisements } from './createAdvertisment.js';
+import { addAdvertisement } from './create-advertisment.js';
 
-similarAdvertisements();
+addAdvertisement();
