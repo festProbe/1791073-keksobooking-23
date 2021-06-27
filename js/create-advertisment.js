@@ -1,8 +1,7 @@
 import { randomInt, randomCoords, getRandomArrayElement, getRandomArray } from './utils.js';
 import { store } from './store.js';
-import { generateAdvertisement } from './generate-advertisement.js';
 
-const createAdvertisements = () => {
+const createAdvertisement = () => {
   const location = {
     lat: randomCoords(35.65, 35.7, 4),
     lng: randomCoords(139.7, 139.8, 4),
@@ -30,6 +29,8 @@ const createAdvertisements = () => {
   return { author, location, offer };
 };
 
-const addAdvertisements = () => new Array(store.COUNT_OF_ADVERTISEMENT).fill(null).map(() => generateAdvertisement(createAdvertisements()));
+const createAdvertisements = () => new Array(store.COUNT_OF_ADVERTISEMENT)
+  .fill(null).map(() => createAdvertisement());
 
-export { addAdvertisements };
+export { createAdvertisements };
+
