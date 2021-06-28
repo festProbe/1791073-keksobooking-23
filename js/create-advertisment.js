@@ -29,6 +29,8 @@ const createAdvertisement = () => {
   return { author, location, offer };
 };
 
-const addAdvertisement = () => new Array(store.COUNT_OF_ADVERTISEMENT).fill(null).map(() => createAdvertisement());
+const createAdvertisements = () => new Array(store.COUNT_OF_ADVERTISEMENT)
+  .fill(null).map(() => createAdvertisement());
 
-export { addAdvertisement };
+export { createAdvertisements };
+

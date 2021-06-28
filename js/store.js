@@ -24,7 +24,7 @@ const store = {
     'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
     'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
   ],
-  COUNT_OF_ADVERTISEMENT: 10,
+  COUNT_OF_ADVERTISEMENT: 2,
 };
 
 export { store };
