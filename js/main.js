@@ -10,4 +10,3 @@ putAdvertisementInMarkup(advertisementsMarkup[0]);
 
 formEnable();
 formDisable();
-
