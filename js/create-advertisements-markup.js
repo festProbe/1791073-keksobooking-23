@@ -19,8 +19,6 @@ const createAdvertisementsMarkup = function (advertisement) {
 
   cardItem.querySelector('.popup__text--price').textContent = `${advertisement.offer.price} ₽/ночь`;
 
-
-  // eslint-disable-next-line id-length
   cardItem.querySelector('.popup__type').textContent = TYPES_OF_APARTAMENTS[advertisement.offer.type];
 
   cardItem.querySelector('.popup__text--capacity').textContent = `${advertisement.offer.rooms} комнаты для ${advertisement.offer.guests} гостей`;
@@ -34,7 +32,7 @@ const createAdvertisementsMarkup = function (advertisement) {
       item.remove();
     }
   });
-  if (features === []) {
+  if (Array.isArray(features) && features.length === 0) {
     cardItem.querySelectorAll('.popup__feature').classList.add('hidden');
   }
 
