@@ -2,8 +2,11 @@ const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 
 const advertisementTitleInput = document.querySelector('.ad-form__element > input');
-const typeOfApartamentsOption = document.querySelectorAll('fieldset.ad-form__element > #type > option');
+const typeOfApartamentsSelect = document.querySelector('fieldset.ad-form__element > #type');
+const typeOfApartamentsOptions = typeOfApartamentsSelect.querySelectorAll('#type > option');
+const priceInput = document.querySelector('#price');
 
+priceInput.min = 5000;
 
 advertisementTitleInput.addEventListener('invalid', () => {
   if (advertisementTitleInput.validity.tooShort) {
@@ -31,8 +34,43 @@ advertisementTitleInput.addEventListener('input', () => {
   advertisementTitleInput.reportValidity();
 });
 
-typeOfApartamentsOption.addEventListener('change', () => {
-  for (const value of typeOfApartamentsOption) {
-
+typeOfApartamentsSelect.addEventListener('change', () => {
+  let currentType;
+  let minPrice;
+  // eslint-disable-next-line id-length
+  for (let i = 0; i < typeOfApartamentsOptions.length; i++) {
+    if (typeOfApartamentsOptions[i].selected) {
+      currentType = typeOfApartamentsOptions[i].value;
+    }
+    switch (currentType) {
+      case 'bungalow':
+        minPrice = 0;
+        break;
+      case 'house':
+        minPrice = 5000;
+        break;
+      case 'palace':
+        minPrice = 10000;
+        break;
+      case 'flat':
+        minPrice = 1000;
+        break;
+      case 'hotel':
+        minPrice = 3000;
+        break;
+    }
   }
+  priceInput.min = minPrice;
+  priceInput.placeholder = minPrice;
+});
+
+priceInput.addEventListener('input', () => {
+  if (priceInput.validity.rangeUnderflow) {
+    priceInput.setCustomValidity(`Минимальная цена - ${priceInput.min} ₽/ночь`);
+  } else if (priceInput.validity.rangeOverflow) {
+    priceInput.setCustomValidity(`Максимальная цена - ${priceInput.max} ₽/ночь`);
+  } else {
+    priceInput.setCustomValidity('');
+  }
+  priceInput.reportValidity();
 });

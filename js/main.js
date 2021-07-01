@@ -9,5 +9,5 @@ const advertisementsMarkup = advertisements.map((card) => createAdvertisementsMa
 putAdvertisementInMarkup(advertisementsMarkup[0]);
 
 formEnable();
-//formDisable();
+formDisable();
 
