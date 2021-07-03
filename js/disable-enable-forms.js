@@ -11,10 +11,10 @@ const disableForm = () => {
   }
   mapFiltersForm.classList.add('map__filters--disabled');
   for (const item of mapFiltersFormFieldsets) {
-    item.disabled = false;
+    item.disabled = true;
   }
   for (const item of mapFiltersFormSelects) {
-    item.disabled = false;
+    item.disabled = true;
   }
 };
 
@@ -25,10 +25,10 @@ const enableForm = () => {
   }
   mapFiltersForm.classList.remove('map__filters--disabled');
   for (const item of mapFiltersFormFieldsets) {
-    item.disabled = true;
+    item.disabled = false;
   }
   for (const item of mapFiltersFormSelects) {
-    item.disabled = true;
+    item.disabled = false;
   }
 };
 
