@@ -5,6 +5,10 @@ const advertisementTitleInput = document.querySelector('.ad-form__element > inpu
 const typeOfApartamentsSelect = document.querySelector('fieldset.ad-form__element > #type');
 const typeOfApartamentsOptions = typeOfApartamentsSelect.querySelectorAll('#type > option');
 const priceInput = document.querySelector('#price');
+const timeInSelect = document.querySelector('#timein');
+const timeInValues = timeInSelect.querySelectorAll('#timein > option');
+const timeOutSelect = document.querySelector('#timeout');
+const timeOutValues = timeOutSelect.querySelectorAll('#timeout > option');
 
 const PRICE_LIST = {
   house: 5000,
@@ -13,7 +17,6 @@ const PRICE_LIST = {
   palace: 10000,
   hotel: 5000,
 };
-
 priceInput.min = PRICE_LIST.house;
 
 advertisementTitleInput.addEventListener('input', () => {
@@ -70,4 +73,28 @@ priceInput.addEventListener('input', () => {
     priceInput.setCustomValidity('');
   }
   priceInput.reportValidity();
+});
+
+timeInSelect.addEventListener('change', () => {
+  for (const timeIn of timeInValues) {
+    if (timeIn.selected) {
+      for (const timeOut of timeOutValues) {
+        if (timeIn.value === timeOut.value) {
+          timeOut.selected = true;
+        }
+      }
+    }
+  }
+});
+
+timeOutSelect.addEventListener('change', () => {
+  for (const timeOut of timeOutValues) {
+    if (timeOut.selected) {
+      for (const timeIn of timeInValues) {
+        if (timeOut.value === timeIn.value) {
+          timeIn.selected = true;
+        }
+      }
+    }
+  }
 });
