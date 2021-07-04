@@ -7,7 +7,7 @@ const mapFiltersFormSelects = mapFiltersForm.querySelectorAll('.map__filters > s
 const disableForm = () => {
   advertisementsForm.classList.add('ad-form--disabled');
   for (const item of advertisementsFormFieldsets) {
-    item.classList.add('hidden');
+    item.disabled = true;
   }
   mapFiltersForm.classList.add('map__filters--disabled');
   for (const item of mapFiltersFormFieldsets) {
@@ -21,7 +21,7 @@ const disableForm = () => {
 const enableForm = () => {
   advertisementsForm.classList.remove('ad-form--disabled');
   for (const item of advertisementsFormFieldsets) {
-    item.classList.remove('hidden');
+    item.disabled = false;
   }
   mapFiltersForm.classList.remove('map__filters--disabled');
   for (const item of mapFiltersFormFieldsets) {
