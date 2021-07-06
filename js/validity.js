@@ -1,23 +1,32 @@
-const MIN_TITLE_LENGTH = 30;
-const MAX_TITLE_LENGTH = 100;
+const MIN_TITLE_LENGTH = 30,
+  MAX_TITLE_LENGTH = 100,
+  HOUSE = 5000,
+  BUNGALOW = 0,
+  FLAT = 3000,
+  PALACE = 10000,
+  HOTEL = 5000;
 
 const advertisementTitleInput = document.querySelector('.ad-form__element > input');
-const typeOfApartamentsSelect = document.querySelector('fieldset.ad-form__element > #type');
-const typeOfApartamentsOptions = typeOfApartamentsSelect.querySelectorAll('#type > option');
+const typeOfApartamentsSelect = document.querySelector('#type');
+const typeOfApartamentsOptions = typeOfApartamentsSelect.querySelectorAll('option');
 const priceInput = document.querySelector('#price');
 const timeInSelect = document.querySelector('#timein');
-const timeInValues = timeInSelect.querySelectorAll('#timein > option');
+const timeInValues = timeInSelect.querySelectorAll('#option');
 const timeOutSelect = document.querySelector('#timeout');
-const timeOutValues = timeOutSelect.querySelectorAll('#timeout > option');
+const timeOutValues = timeOutSelect.querySelectorAll('#option');
+const roomsNumber = document.querySelector('#room_number');
+const roomsNumberValues = roomsNumber.querySelectorAll('option');
+const capacitySelect = document.querySelector('#capacity');
+const capacityValues = capacitySelect.querySelectorAll('option');
 
-const PRICE_LIST = {
-  house: 5000,
-  bungalow: 0,
-  flat: 3000,
-  palace: 10000,
-  hotel: 5000,
-};
-priceInput.min = PRICE_LIST.house;
+for (const item of capacityValues) {
+  item.disabled = true;
+  if (item.value === '1') {
+    item.disabled = false;
+    item.selected = true;
+  }
+}
+priceInput.min = HOUSE;
 
 advertisementTitleInput.addEventListener('input', () => {
   const titleLength = advertisementTitleInput.value.length;
@@ -42,22 +51,22 @@ typeOfApartamentsSelect.addEventListener('change', () => {
   }
   switch (currentType) {
     case 'bungalow':
-      minPrice = PRICE_LIST.bungalow;
+      minPrice = BUNGALOW;
       break;
     case 'house':
-      minPrice = PRICE_LIST.house;
+      minPrice = HOUSE;
       break;
     case 'palace':
-      minPrice = PRICE_LIST.palace;
+      minPrice = PALACE;
       break;
     case 'flat':
-      minPrice = PRICE_LIST.flat;
+      minPrice = FLAT;
       break;
     case 'hotel':
-      minPrice = PRICE_LIST.hotel;
+      minPrice = HOTEL;
       break;
     default:
-      minPrice = PRICE_LIST.house;
+      minPrice = HOUSE;
       break;
   }
   priceInput.min = minPrice;
@@ -94,6 +103,56 @@ timeOutSelect.addEventListener('change', () => {
         if (timeOut.value === timeIn.value) {
           timeIn.selected = true;
         }
+      }
+    }
+  }
+});
+
+roomsNumber.addEventListener('change', () => {
+  for (const item of capacityValues) {
+    item.disabled = true;
+  }
+  for (const room of roomsNumberValues) {
+    if (room.selected) {
+      switch (room.value) {
+        case '1':
+          for (const capacity of capacityValues) {
+            if (capacity.value === '1') {
+              capacity.disabled = false;
+              capacity.selected = true;
+            }
+          }
+          break;
+        case '2':
+          for (const capacity of capacityValues) {
+            if (capacity.value === '1') {
+              capacity.disabled = false;
+              capacity.selected = true;
+            }
+            if (capacity.value === '2') {
+              capacity.disabled = false;
+            }
+          }
+          break;
+        case '3':
+          for (const capacity of capacityValues) {
+            if (capacity.value === '1') {
+              capacity.disabled = false;
+              capacity.selected = true;
+            }
+            if (capacity.value === '2' || capacity.value === '3') {
+              capacity.disabled = false;
+            }
+          }
+          break;
+        case '100':
+          for (const capacity of capacityValues) {
+            if (capacity.value === '0') {
+              capacity.disabled = false;
+              capacity.selected = true;
+            }
+          }
+          break;
       }
     }
   }
