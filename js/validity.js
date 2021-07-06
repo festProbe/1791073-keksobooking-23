@@ -1,10 +1,14 @@
-const MIN_TITLE_LENGTH = 30,
-  MAX_TITLE_LENGTH = 100,
-  HOUSE_MIN_PRICE = 5000,
-  BUNGALOW_MIN_PRICE = 0,
-  FLAT_MIN_PRICE = 3000,
-  PALACE_MIN_PRICE = 10000,
-  HOTEL_MIN_PRICE = 5000;
+const TitleLength = {
+  MIN_TITLE_LENGTH: 30,
+  MAX_TITLE_LENGTH: 100,
+};
+const MinPrice = {
+  HOUSE_MIN_PRIC: 5000,
+  BUNGALOW_MIN_PRICE: 0,
+  FLAT_MIN_PRICE: 3000,
+  PALACE_MIN_PRICE: 10000,
+  HOTEL_MIN_PRICE: 5000,
+};
 
 const advertisementTitleInput = document.querySelector('.ad-form__element > input');
 const typeOfApartamentsSelect = document.querySelector('#type');
@@ -19,14 +23,12 @@ const roomsNumberValues = roomsNumber.querySelectorAll('option');
 const capacitySelect = document.querySelector('#capacity');
 const capacityValues = capacitySelect.querySelectorAll('option');
 
-priceInput.min = HOUSE_MIN_PRICE;
-
 advertisementTitleInput.addEventListener('input', () => {
   const titleLength = advertisementTitleInput.value.length;
-  if (titleLength < MIN_TITLE_LENGTH && titleLength > 0) {
-    advertisementTitleInput.setCustomValidity(`Минимальная длина заголовка - ${MIN_TITLE_LENGTH} символов.`);
-  } else if (titleLength > MAX_TITLE_LENGTH) {
-    advertisementTitleInput.setCustomValidity(`Максимальная длина заголовка - ${MAX_TITLE_LENGTH} символов.`);
+  if (titleLength < TitleLength.MIN_TITLE_LENGTH && titleLength > 0) {
+    advertisementTitleInput.setCustomValidity(`Минимальная длина заголовка - ${TitleLength.MIN_TITLE_LENGTH} символов.`);
+  } else if (titleLength > TitleLength.MAX_TITLE_LENGTH) {
+    advertisementTitleInput.setCustomValidity(`Максимальная длина заголовка - ${TitleLength.MAX_TITLE_LENGTH} символов.`);
   } else {
     advertisementTitleInput.setCustomValidity('');
   }
@@ -44,22 +46,22 @@ typeOfApartamentsSelect.addEventListener('change', () => {
   }
   switch (currentType) {
     case 'bungalow':
-      minPrice = BUNGALOW_MIN_PRICE;
+      minPrice = MinPrice.BUNGALOW_MIN_PRICE;
       break;
     case 'house':
-      minPrice = HOUSE_MIN_PRICE;
+      minPrice = MinPrice.HOUSE_MIN_PRICE;
       break;
     case 'palace':
-      minPrice = PALACE_MIN_PRICE;
+      minPrice = MinPrice.PALACE_MIN_PRICE;
       break;
     case 'flat':
-      minPrice = FLAT_MIN_PRICE;
+      minPrice = MinPrice.FLAT_MIN_PRICE;
       break;
     case 'hotel':
-      minPrice = HOTEL_MIN_PRICE;
+      minPrice = MinPrice.HOTEL_MIN_PRICE;
       break;
     default:
-      minPrice = HOUSE_MIN_PRICE;
+      minPrice = MinPrice.HOUSE_MIN_PRICE;
       break;
   }
   priceInput.min = minPrice;
