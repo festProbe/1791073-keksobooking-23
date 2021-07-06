@@ -1,32 +1,25 @@
 const MIN_TITLE_LENGTH = 30,
   MAX_TITLE_LENGTH = 100,
-  HOUSE = 5000,
-  BUNGALOW = 0,
-  FLAT = 3000,
-  PALACE = 10000,
-  HOTEL = 5000;
+  HOUSE_MIN_PRICE = 5000,
+  BUNGALOW_MIN_PRICE = 0,
+  FLAT_MIN_PRICE = 3000,
+  PALACE_MIN_PRICE = 10000,
+  HOTEL_MIN_PRICE = 5000;
 
 const advertisementTitleInput = document.querySelector('.ad-form__element > input');
 const typeOfApartamentsSelect = document.querySelector('#type');
 const typeOfApartamentsOptions = typeOfApartamentsSelect.querySelectorAll('option');
 const priceInput = document.querySelector('#price');
 const timeInSelect = document.querySelector('#timein');
-const timeInValues = timeInSelect.querySelectorAll('#option');
+const timeInValues = timeInSelect.querySelectorAll('option');
 const timeOutSelect = document.querySelector('#timeout');
-const timeOutValues = timeOutSelect.querySelectorAll('#option');
+const timeOutValues = timeOutSelect.querySelectorAll('option');
 const roomsNumber = document.querySelector('#room_number');
 const roomsNumberValues = roomsNumber.querySelectorAll('option');
 const capacitySelect = document.querySelector('#capacity');
 const capacityValues = capacitySelect.querySelectorAll('option');
 
-for (const item of capacityValues) {
-  item.disabled = true;
-  if (item.value === '1') {
-    item.disabled = false;
-    item.selected = true;
-  }
-}
-priceInput.min = HOUSE;
+priceInput.min = HOUSE_MIN_PRICE;
 
 advertisementTitleInput.addEventListener('input', () => {
   const titleLength = advertisementTitleInput.value.length;
@@ -51,22 +44,22 @@ typeOfApartamentsSelect.addEventListener('change', () => {
   }
   switch (currentType) {
     case 'bungalow':
-      minPrice = BUNGALOW;
+      minPrice = BUNGALOW_MIN_PRICE;
       break;
     case 'house':
-      minPrice = HOUSE;
+      minPrice = HOUSE_MIN_PRICE;
       break;
     case 'palace':
-      minPrice = PALACE;
+      minPrice = PALACE_MIN_PRICE;
       break;
     case 'flat':
-      minPrice = FLAT;
+      minPrice = FLAT_MIN_PRICE;
       break;
     case 'hotel':
-      minPrice = HOTEL;
+      minPrice = HOTEL_MIN_PRICE;
       break;
     default:
-      minPrice = HOUSE;
+      minPrice = HOUSE_MIN_PRICE;
       break;
   }
   priceInput.min = minPrice;
