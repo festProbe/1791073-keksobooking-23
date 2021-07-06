@@ -1,41 +1,34 @@
-const MIN_TITLE_LENGTH = 30;
-const MAX_TITLE_LENGTH = 100;
+const TitleLength = {
+  MIN_TITLE_LENGTH: 30,
+  MAX_TITLE_LENGTH: 100,
+};
+const MinPrice = {
+  HOUSE_MIN_PRIC: 5000,
+  BUNGALOW_MIN_PRICE: 0,
+  FLAT_MIN_PRICE: 3000,
+  PALACE_MIN_PRICE: 10000,
+  HOTEL_MIN_PRICE: 5000,
+};
 
 const advertisementTitleInput = document.querySelector('.ad-form__element > input');
-const typeOfApartamentsSelect = document.querySelector('fieldset.ad-form__element > #type');
-const typeOfApartamentsOptions = typeOfApartamentsSelect.querySelectorAll('#type > option');
+const typeOfApartamentsSelect = document.querySelector('#type');
+const typeOfApartamentsOptions = typeOfApartamentsSelect.querySelectorAll('option');
 const priceInput = document.querySelector('#price');
 const timeInSelect = document.querySelector('#timein');
-const timeInValues = timeInSelect.querySelectorAll('#timein > option');
+const timeInValues = timeInSelect.querySelectorAll('option');
 const timeOutSelect = document.querySelector('#timeout');
-const timeOutValues = timeOutSelect.querySelectorAll('#timeout > option');
+const timeOutValues = timeOutSelect.querySelectorAll('option');
 const roomsNumber = document.querySelector('#room_number');
-const roomsNumberValues = roomsNumber.querySelectorAll('#room_number > option');
+const roomsNumberValues = roomsNumber.querySelectorAll('option');
 const capacitySelect = document.querySelector('#capacity');
-const capacityValues = capacitySelect.querySelectorAll('#capacity > option');
-
-for (const item of capacityValues) {
-  item.disabled = true;
-  if (item.value === '1') {
-    item.disabled = false;
-    item.selected = true;
-  }
-}
-
-const HOUSE = 5000,
-  BUNGALOW = 0,
-  FLAT = 3000,
-  PALACE = 10000,
-  HOTEL = 5000;
-
-priceInput.min = HOUSE;
+const capacityValues = capacitySelect.querySelectorAll('option');
 
 advertisementTitleInput.addEventListener('input', () => {
   const titleLength = advertisementTitleInput.value.length;
-  if (titleLength < MIN_TITLE_LENGTH && titleLength > 0) {
-    advertisementTitleInput.setCustomValidity(`Минимальная длина заголовка - ${MIN_TITLE_LENGTH} символов.`);
-  } else if (titleLength > MAX_TITLE_LENGTH) {
-    advertisementTitleInput.setCustomValidity(`Максимальная длина заголовка - ${MAX_TITLE_LENGTH} символов.`);
+  if (titleLength < TitleLength.MIN_TITLE_LENGTH && titleLength > 0) {
+    advertisementTitleInput.setCustomValidity(`Минимальная длина заголовка - ${TitleLength.MIN_TITLE_LENGTH} символов.`);
+  } else if (titleLength > TitleLength.MAX_TITLE_LENGTH) {
+    advertisementTitleInput.setCustomValidity(`Максимальная длина заголовка - ${TitleLength.MAX_TITLE_LENGTH} символов.`);
   } else {
     advertisementTitleInput.setCustomValidity('');
   }
@@ -53,22 +46,22 @@ typeOfApartamentsSelect.addEventListener('change', () => {
   }
   switch (currentType) {
     case 'bungalow':
-      minPrice = BUNGALOW;
+      minPrice = MinPrice.BUNGALOW_MIN_PRICE;
       break;
     case 'house':
-      minPrice = HOUSE;
+      minPrice = MinPrice.HOUSE_MIN_PRICE;
       break;
     case 'palace':
-      minPrice = PALACE;
+      minPrice = MinPrice.PALACE_MIN_PRICE;
       break;
     case 'flat':
-      minPrice = FLAT;
+      minPrice = MinPrice.FLAT_MIN_PRICE;
       break;
     case 'hotel':
-      minPrice = HOTEL;
+      minPrice = MinPrice.HOTEL_MIN_PRICE;
       break;
     default:
-      minPrice = HOUSE;
+      minPrice = MinPrice.HOUSE_MIN_PRICE;
       break;
   }
   priceInput.min = minPrice;
