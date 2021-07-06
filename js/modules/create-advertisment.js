@@ -3,7 +3,7 @@ import { store } from './store.js';
 
 const createAdvertisement = () => {
   const location = {
-    lat: randomCoords(35.65, 35.7, 4),
+lat: randomCoords(35.65, 35.7, 4),
     lng: randomCoords(139.7, 139.8, 4),
   };
 

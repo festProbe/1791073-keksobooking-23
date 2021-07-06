@@ -1,8 +1,8 @@
 import { disableForm, enableForm } from './disable-enable-forms.js';
+import { createAdvertisements } from './create-advertisment.js';
+import { createAdvertisementsMarkup } from './create-advertisements-markup.js';
 
 const address = document.querySelector('#address');
-const advertisementAddress = document.querySelectorAll('.popup__text--address');
-console.log(advertisementAddress);
 const DEFAULT_COORDS = { lat: 35.652832, lng: 139.839478 };
 
 address.value = `${DEFAULT_COORDS.lat.toFixed(5)}, ${DEFAULT_COORDS.lng.toFixed(5)}`;
@@ -23,8 +23,14 @@ L.tileLayer(
 
 const mainPinIcon = L.icon({
   iconUrl: './../img/main-pin.svg',
-  iconSize: [34, 46],
-  iconAnchor: [17, 46],
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
+});
+
+const advertisementMarkerIcon = L.icon({
+  iconUrl: './../img/pin.svg',
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
 });
 
 const marker = L.marker(
@@ -41,5 +47,22 @@ marker.on('drag', () => {
 
 marker.addTo(map);
 
-//const advertisementsGroup = L.layerGroup().addTo(map);
+const advertisements = createAdvertisements();
+for (const advertisement of advertisements) {
+  const lat = advertisement.location.lat;
+  const lng = advertisement.location.lng;
+  const marker1 = L.marker(
+    {
+      lat,
+      lng,
+    },
+    {
+      advertisementMarkerIcon,
+    },
+  );
+  marker1.addTo(map);
+  marker1.bindPopup(
+    createAdvertisementsMarkup(advertisement),
+  );
+}
 
