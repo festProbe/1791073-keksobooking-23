@@ -7,28 +7,28 @@ const mapFiltersFormSelects = mapFiltersForm.querySelectorAll('.map__filters > s
 const disableForm = () => {
   advertisementsForm.classList.add('ad-form--disabled');
   for (const item of advertisementsFormFieldsets) {
-    item.classList.add('hidden');
+    item.disabled = true;
   }
   mapFiltersForm.classList.add('map__filters--disabled');
   for (const item of mapFiltersFormFieldsets) {
-    item.disabled = false;
+    item.disabled = true;
   }
   for (const item of mapFiltersFormSelects) {
-    item.disabled = false;
+    item.disabled = true;
   }
 };
 
 const enableForm = () => {
   advertisementsForm.classList.remove('ad-form--disabled');
   for (const item of advertisementsFormFieldsets) {
-    item.classList.remove('hidden');
+    item.disabled = false;
   }
   mapFiltersForm.classList.remove('map__filters--disabled');
   for (const item of mapFiltersFormFieldsets) {
-    item.disabled = true;
+    item.disabled = false;
   }
   for (const item of mapFiltersFormSelects) {
-    item.disabled = true;
+    item.disabled = false;
   }
 };
 
