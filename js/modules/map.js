@@ -1,6 +1,8 @@
 import { disableForm, enableForm } from './disable-enable-forms.js';
 
 const address = document.querySelector('#address');
+const advertisementAddress = document.querySelectorAll('.popup__text--address');
+console.log(advertisementAddress);
 const DEFAULT_COORDS = { lat: 35.652832, lng: 139.839478 };
 
 address.value = `${DEFAULT_COORDS.lat.toFixed(5)}, ${DEFAULT_COORDS.lng.toFixed(5)}`;
