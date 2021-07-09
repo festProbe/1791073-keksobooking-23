@@ -2,17 +2,32 @@ import { disableForm, enableForm } from './disable-enable-forms.js';
 import { createAdvertisements } from './create-advertisment.js';
 import { createAdvertisementsMarkup } from './create-advertisements-markup.js';
 
-const address = document.querySelector('#address');
-const DEFAULT_COORDS = { lat: 35.652832, lng: 139.839478 };
+const Settings = {
+  MapSettings: {
+    DEFAULT_COORDS: { lat: 35.652832, lng: 139.839478 },
+    START_ZOOM: 13,
+  },
+  MainMarkerSettings: {
+    ICON_URL: './../img/main-pin.svg',
+    ICON_SIZE: [52, 52],
+    ICON_ARCHOR: [26, 52],
+  },
+  AdvertisementMarkerSettings: {
+    ICON_URL: './../img/pin.svg',
+    ICON_SIZE: [40, 40],
+    ICON_ARCHOR: [20, 40],
+  },
+};
 
-address.value = `${DEFAULT_COORDS.lat.toFixed(5)}, ${DEFAULT_COORDS.lng.toFixed(5)}`;
+const address = document.querySelector('#address');
+address.value = `${Settings.MapSettings.DEFAULT_COORDS.lat.toFixed(5)}, ${Settings.MapSettings.DEFAULT_COORDS.lng.toFixed(5)}`;
 
 disableForm();
 const map = L.map('map-canvas')
   .on('load', () => {
     enableForm();
   })
-  .setView(DEFAULT_COORDS, 13);
+  .setView(Settings.MapSettings.DEFAULT_COORDS, Settings.MapSettings.START_ZOOM);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -22,36 +37,36 @@ L.tileLayer(
 ).addTo(map);
 
 const mainPinIcon = L.icon({
-  iconUrl: './../img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconUrl: Settings.MainMarkerSettings.ICON_URL,
+  iconSize: Settings.MainMarkerSettings.ICON_SIZE,
+  iconAnchor: Settings.MainMarkerSettings.ICON_ARCHOR,
 });
 
 const advertisementMarkerIcon = L.icon({
-  iconUrl: './../img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
+  iconUrl: Settings.AdvertisementMarkerSettings.ICON_URL,
+  iconSize: Settings.AdvertisementMarkerSettings.ICON_SIZE,
+  iconAnchor: Settings.AdvertisementMarkerSettings.ICON_ARCHOR,
 });
 
-const marker = L.marker(
-  DEFAULT_COORDS,
+const mainMarker = L.marker(
+  Settings.MapSettings.DEFAULT_COORDS,
   {
     draggable: true,
     icon: mainPinIcon,
   },
 );
 
-marker.on('drag', () => {
-  address.value = `${marker.getLatLng().lat.toFixed(5)}, ${marker.getLatLng().lng.toFixed(5)}`;
+mainMarker.on('drag', () => {
+  address.value = `${mainMarker.getLatLng().lat.toFixed(5)}, ${mainMarker.getLatLng().lng.toFixed(5)}`;
 });
 
-marker.addTo(map);
+mainMarker.addTo(map);
 
 const advertisements = createAdvertisements();
 for (const advertisement of advertisements) {
   const lat = advertisement.location.lat;
   const lng = advertisement.location.lng;
-  const marker1 = L.marker(
+  const advertisementMarker = L.marker(
     {
       lat,
       lng,
@@ -60,8 +75,8 @@ for (const advertisement of advertisements) {
       advertisementMarkerIcon,
     },
   );
-  marker1.addTo(map);
-  marker1.bindPopup(
+  advertisementMarker.addTo(map);
+  advertisementMarker.bindPopup(
     createAdvertisementsMarkup(advertisement),
   );
 }
