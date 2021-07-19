@@ -1,20 +1,20 @@
+import { showSuccessMessage, showErrorMessage } from './utils.js';
 import { sendData } from './fetch.js';
-import { defaultPosition } from './map.js';
+import { setDefaultPosition } from './map.js';
 
-const SUCCESS_ERROR_TIMEOUT_TIMER = 2000;
 const TitleLength = {
   MIN_TITLE_LENGTH: 30,
   MAX_TITLE_LENGTH: 100,
 };
 const MinPrice = {
-  HOUSE_MIN_PRIC: 5000,
+  HOUSE_MIN_PRICE: 5000,
   BUNGALOW_MIN_PRICE: 0,
   FLAT_MIN_PRICE: 3000,
   PALACE_MIN_PRICE: 10000,
   HOTEL_MIN_PRICE: 5000,
 };
 
-const form = document.querySelector('.ad-form');
+
 const advertisementTitleInput = document.querySelector('.ad-form__element > input');
 const typeOfApartamentsSelect = document.querySelector('#type');
 const typeOfApartamentsOptions = typeOfApartamentsSelect.querySelectorAll('option');
@@ -29,10 +29,14 @@ const capacitySelect = document.querySelector('#capacity');
 const capacityValues = capacitySelect.querySelectorAll('option');
 const featureOptions = document.querySelectorAll('.features > input');
 const resetButton = document.querySelector('.ad-form__reset');
+const description = document.querySelector('#description');
 
-const makeDefault = () => {
+const setDefaultFormSettings = () => {
   advertisementTitleInput.value = '';
   priceInput.value = '';
+  priceInput.min = MinPrice.FLAT_MIN_PRICE;
+  priceInput.placeholder = MinPrice.FLAT_MIN_PRICE;
+  description.value = '';
   for (const option of typeOfApartamentsOptions) {
     option.selected = false;
     if (option.value === 'flat') {
@@ -94,7 +98,7 @@ typeOfApartamentsSelect.addEventListener('change', () => {
       minPrice = MinPrice.HOTEL_MIN_PRICE;
       break;
     default:
-      minPrice = MinPrice.HOUSE_MIN_PRICE;
+      minPrice = MinPrice.FLAT_MIN_PRICE;
       break;
   }
   priceInput.min = minPrice;
@@ -186,38 +190,17 @@ roomsNumber.addEventListener('change', () => {
   }
 });
 
-const successMessageTemplate = document.querySelector('#success')
-  .content
-  .querySelector('.success');
-const successMessage = successMessageTemplate.cloneNode(true);
-
-
-const errorMessageTemplate = document.querySelector('#error')
-  .content
-  .querySelector('.error');
-const errorMessage = errorMessageTemplate.cloneNode(true);
-
-const handInAdvertisement = (onSuccess) => {
+const form = document.querySelector('.ad-form');
+const sendAdvertisement = (onSuccess) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     sendData(
       () => {
         onSuccess();
-        form.append(successMessage);
-        setTimeout(() => {
-          successMessage.remove();
-        }, SUCCESS_ERROR_TIMEOUT_TIMER);
+        showSuccessMessage();
       },
       () => {
-        form.append(errorMessage);
-
-        const tryAgainButton = errorMessage.querySelector('.error__button');
-        tryAgainButton.addEventListener('click', () => {
-          errorMessage.remove();
-        });
-        setTimeout(() => {
-          errorMessage.remove();
-        }, SUCCESS_ERROR_TIMEOUT_TIMER);
+        showErrorMessage();
       },
       new FormData(evt.target),
     );
@@ -225,8 +208,8 @@ const handInAdvertisement = (onSuccess) => {
 };
 
 const clearForm = () => {
-  makeDefault();
-  defaultPosition();
+  setDefaultFormSettings();
+  setDefaultPosition();
 };
 
 resetButton.addEventListener('click', (evt) => {
@@ -234,4 +217,4 @@ resetButton.addEventListener('click', (evt) => {
   clearForm();
 });
 
-export { handInAdvertisement, clearForm };
+export { sendAdvertisement, clearForm };

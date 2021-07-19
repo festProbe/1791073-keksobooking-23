@@ -1,6 +1,31 @@
 const TIMEOUT_TIMER = 4000;
 
-const showAlert = (error) => {
+const form = document.querySelector('.ad-form');
+
+const successMessageTemplate = document.querySelector('#success')
+  .content
+  .querySelector('.success');
+const successMessage = successMessageTemplate.cloneNode(true);
+
+const errorMessageTemplate = document.querySelector('#error')
+  .content
+  .querySelector('.error');
+const errorMessage = errorMessageTemplate.cloneNode(true);
+
+const onMessageEscKeydown = (evt) => {
+  if (evt.key === 'Escape' || evt.key === 'Esc') {
+    successMessage.remove();
+    errorMessage.remove();
+    document.removeEventListener('keydown', onMessageEscKeydown);
+  }
+};
+
+const removeMessage = (message) => {
+  message.remove();
+  document.removeEventListener('keydown', onMessageEscKeydown);
+};
+
+const showAlertMessage = (error) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.width = '50%';
   alertContainer.style.height = '100px';
@@ -21,4 +46,24 @@ const showAlert = (error) => {
   }, TIMEOUT_TIMER);
 };
 
-export { showAlert };
+const showSuccessMessage = () => {
+  form.append(successMessage);
+  document.addEventListener('keydown', onMessageEscKeydown);
+  setTimeout(() => {
+    removeMessage(successMessage);
+  }, TIMEOUT_TIMER);
+};
+
+const showErrorMessage = () => {
+  form.append(errorMessage);
+  const tryAgainButton = errorMessage.querySelector('.error__button');
+  tryAgainButton.addEventListener('click', () => {
+    removeMessage(errorMessage);
+  });
+  document.addEventListener('keydown', onMessageEscKeydown);
+  setTimeout(() => {
+    removeMessage(errorMessage);
+  }, TIMEOUT_TIMER);
+};
+
+export { showSuccessMessage, showErrorMessage, showAlertMessage };

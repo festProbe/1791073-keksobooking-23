@@ -1,4 +1,4 @@
-import { map, advertisementMarkerIcon } from './map.js';
+import { drawAdvertisementsMarker } from './map.js';
 
 const advertisementTemplate = document.querySelector('#card')
   .content
@@ -13,12 +13,12 @@ const TYPES_OF_APARTAMENTS = {
 };
 
 const createPopups = function (advertisements) {
-  advertisements.forEach(({ author, location, offer }) => {
+  const popups = advertisements.map(({ author, offer, location }) => {
     const cardItem = advertisementTemplate.cloneNode(true);
 
     cardItem.querySelector('.popup__title').textContent = offer.title;
 
-    cardItem.querySelector('.popup__text--address').textContent = offer.address;
+    cardItem.querySelector('.popup__text--address').textContent = `${offer.address} (${location.lat.toFixed(5)} - ${location.lng.toFixed(5)})`;
 
     cardItem.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
 
@@ -59,28 +59,15 @@ const createPopups = function (advertisements) {
         photoSet.appendChild(photoItem);
       }
       photoItems[0].remove();
-      if (offerPhoto === []) {
+      if (typeof (offerPhoto) !== undefined && offerPhoto !== null && offerPhoto.length > 0) {
         photoSet.classList.add('hidden');
       }
     }
-
     cardItem.querySelector('.popup__avatar').src = author.avatar;
-    const lat = location.lat;
-    const lng = location.lng;
-    const advertisementMarker = L.marker(
-      {
-        lat,
-        lng,
-      },
-      {
-        advertisementMarkerIcon,
-      },
-    );
-    advertisementMarker.addTo(map);
-    advertisementMarker.bindPopup(
-      cardItem,
-    );
+
+    drawAdvertisementsMarker(cardItem, location);
   });
+  return popups;
 };
 
 export { createPopups };

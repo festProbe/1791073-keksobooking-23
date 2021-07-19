@@ -1,4 +1,5 @@
-import { showAlert } from './utils.js';
+import { showAlertMessage } from './utils.js';
+
 const getData = (onSuccess) => {
   fetch('https://23.javascript.pages.academy/keksobooking/data')
     .then((response) => {
@@ -12,10 +13,9 @@ const getData = (onSuccess) => {
       onSuccess(advertisements);
     })
     .catch((error) => {
-      showAlert(error);
+      showAlertMessage(error);
     });
 };
-
 
 const sendData = (onSuccess, onFail, body) => {
   fetch(

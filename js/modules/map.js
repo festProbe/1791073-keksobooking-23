@@ -65,7 +65,7 @@ mainMarker.on('drag', () => {
 
 mainMarker.addTo(map);
 
-const defaultPosition = () => {
+const setDefaultPosition = () => {
   map.setView(
     DEFAULT_COORDS,
     START_ZOOM,
@@ -74,4 +74,20 @@ const defaultPosition = () => {
   address.value = DEFAULT_ADDRESS;
 };
 
-export { map, advertisementMarkerIcon, defaultPosition };
+const drawAdvertisementsMarker = (popupData, locationData) => {
+  const lat = locationData.lat;
+  const lng = locationData.lng;
+  const advertisementMarker = L.marker(
+    {
+      lat,
+      lng,
+    },
+    {
+      advertisementMarkerIcon,
+    },
+  );
+  advertisementMarker.addTo(map);
+  advertisementMarker.bindPopup(popupData);
+};
+
+export { setDefaultPosition, drawAdvertisementsMarker, DEFAULT_ADDRESS };
