@@ -1,37 +1,69 @@
-const randomInt = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  if (min >= 0 && max >= 0) {
-    if (min < max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-    throw new Error('Значение «до» меньше, чем значение «от», или равное ему');
+const TIMEOUT_TIMER = 4000;
+
+const form = document.querySelector('.ad-form');
+
+const successMessageTemplate = document.querySelector('#success')
+  .content
+  .querySelector('.success');
+const successMessage = successMessageTemplate.cloneNode(true);
+
+const errorMessageTemplate = document.querySelector('#error')
+  .content
+  .querySelector('.error');
+const errorMessage = errorMessageTemplate.cloneNode(true);
+
+const onMessageEscKeydown = (evt) => {
+  if (evt.key === 'Escape' || evt.key === 'Esc') {
+    successMessage.remove();
+    errorMessage.remove();
+    document.removeEventListener('keydown', onMessageEscKeydown);
   }
-  throw new Error('Диапазон значений может быть только положительный, включая ноль');
 };
 
-const randomCoords = (min, max, decimalPoint) => {
-  if (min >= 0 && max >= 0) {
-    if (min < max) {
-      return (Math.random() * (max - min) + min).toFixed(decimalPoint);
-    }
-    throw new Error('Значение «до» меньше, чем значение «от», или равное ему');
-  }
-  throw new Error('Диапазон значений может быть только положительный, включая ноль');
+const removeMessage = (message) => {
+  message.remove();
+  document.removeEventListener('keydown', onMessageEscKeydown);
 };
 
-const getRandomArrayElement = function (array) {
-  return array[randomInt(0, array.length - 1)];
+const showAlertMessage = (error) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.width = '50%';
+  alertContainer.style.height = '100px';
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = '25%';
+  alertContainer.style.top = 0;
+  alertContainer.style.padding = '30px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'orange';
+
+  alertContainer.textContent = error.message;
+
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, TIMEOUT_TIMER);
 };
 
-const getRandomArray = (array) => {
-  const randomArray = [];
-  for (let counter = 0; counter < array.length; counter++) {
-    if (Math.random() > 0.5) {
-      randomArray.push(array[counter]);
-    }
-  }
-  return randomArray;
+const showSuccessMessage = () => {
+  form.append(successMessage);
+  document.addEventListener('keydown', onMessageEscKeydown);
+  setTimeout(() => {
+    removeMessage(successMessage);
+  }, TIMEOUT_TIMER);
 };
 
-export { randomInt, randomCoords, getRandomArrayElement, getRandomArray };
+const showErrorMessage = () => {
+  form.append(errorMessage);
+  const tryAgainButton = errorMessage.querySelector('.error__button');
+  tryAgainButton.addEventListener('click', () => {
+    removeMessage(errorMessage);
+  });
+  document.addEventListener('keydown', onMessageEscKeydown);
+  setTimeout(() => {
+    removeMessage(errorMessage);
+  }, TIMEOUT_TIMER);
+};
+
+export { showSuccessMessage, showErrorMessage, showAlertMessage };

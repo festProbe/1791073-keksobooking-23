@@ -1,14 +1,19 @@
+import { showSuccessMessage, showErrorMessage } from './utils.js';
+import { sendData } from './fetch.js';
+import { setDefaultPosition } from './map.js';
+
 const TitleLength = {
   MIN_TITLE_LENGTH: 30,
   MAX_TITLE_LENGTH: 100,
 };
 const MinPrice = {
-  HOUSE_MIN_PRIC: 5000,
+  HOUSE_MIN_PRICE: 5000,
   BUNGALOW_MIN_PRICE: 0,
   FLAT_MIN_PRICE: 3000,
   PALACE_MIN_PRICE: 10000,
   HOTEL_MIN_PRICE: 5000,
 };
+
 
 const advertisementTitleInput = document.querySelector('.ad-form__element > input');
 const typeOfApartamentsSelect = document.querySelector('#type');
@@ -22,6 +27,38 @@ const roomsNumber = document.querySelector('#room_number');
 const roomsNumberValues = roomsNumber.querySelectorAll('option');
 const capacitySelect = document.querySelector('#capacity');
 const capacityValues = capacitySelect.querySelectorAll('option');
+const featureOptions = document.querySelectorAll('.features > input');
+const resetButton = document.querySelector('.ad-form__reset');
+const description = document.querySelector('#description');
+
+const setDefaultFormSettings = () => {
+  advertisementTitleInput.value = '';
+  priceInput.value = '';
+  priceInput.min = MinPrice.FLAT_MIN_PRICE;
+  priceInput.placeholder = MinPrice.FLAT_MIN_PRICE;
+  description.value = '';
+  for (const option of typeOfApartamentsOptions) {
+    option.selected = false;
+    if (option.value === 'flat') {
+      option.selected = true;
+    }
+  }
+  for (const option of roomsNumberValues) {
+    option.selected = false;
+    if (option.value === '12:00') {
+      option.selected = true;
+    }
+  }
+  for (const option of timeInValues) {
+    option.selected = false;
+    if (option.value === '1') {
+      option.selected = true;
+    }
+  }
+  for (const option of featureOptions) {
+    option.checked = false;
+  }
+};
 
 advertisementTitleInput.addEventListener('input', () => {
   const titleLength = advertisementTitleInput.value.length;
@@ -61,7 +98,7 @@ typeOfApartamentsSelect.addEventListener('change', () => {
       minPrice = MinPrice.HOTEL_MIN_PRICE;
       break;
     default:
-      minPrice = MinPrice.HOUSE_MIN_PRICE;
+      minPrice = MinPrice.FLAT_MIN_PRICE;
       break;
   }
   priceInput.min = minPrice;
@@ -152,3 +189,32 @@ roomsNumber.addEventListener('change', () => {
     }
   }
 });
+
+const form = document.querySelector('.ad-form');
+const sendAdvertisement = (onSuccess) => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    sendData(
+      () => {
+        onSuccess();
+        showSuccessMessage();
+      },
+      () => {
+        showErrorMessage();
+      },
+      new FormData(evt.target),
+    );
+  });
+};
+
+const clearForm = () => {
+  setDefaultFormSettings();
+  setDefaultPosition();
+};
+
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  clearForm();
+});
+
+export { sendAdvertisement, clearForm };

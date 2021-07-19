@@ -1,11 +1,13 @@
-import { disableForm, enableForm } from './disable-enable-forms.js';
-import { createAdvertisements } from './create-advertisment.js';
-import { createAdvertisementsMarkup } from './create-advertisements-markup.js';
+import { disableForm, enableForm } from './disable-enable-page.js';
+
+const DEFAULT_COORDS = { lat: 35.652832, lng: 139.839478 };
+const START_ZOOM = 13;
+const DEFAULT_ADDRESS = `${DEFAULT_COORDS.lat.toFixed(5)}, ${DEFAULT_COORDS.lng.toFixed(5)}`;
 
 const Settings = {
   MapSettings: {
-    DEFAULT_COORDS: { lat: 35.652832, lng: 139.839478 },
-    START_ZOOM: 13,
+    DEFAULT_COORDS,
+    START_ZOOM,
   },
   MainMarkerSettings: {
     ICON_URL: './../img/main-pin.svg',
@@ -20,7 +22,7 @@ const Settings = {
 };
 
 const address = document.querySelector('#address');
-address.value = `${Settings.MapSettings.DEFAULT_COORDS.lat.toFixed(5)}, ${Settings.MapSettings.DEFAULT_COORDS.lng.toFixed(5)}`;
+address.value = DEFAULT_ADDRESS;
 
 disableForm();
 const map = L.map('map-canvas')
@@ -57,15 +59,24 @@ const mainMarker = L.marker(
 );
 
 mainMarker.on('drag', () => {
-  address.value = `${mainMarker.getLatLng().lat.toFixed(5)}, ${mainMarker.getLatLng().lng.toFixed(5)}`;
+  const currentAddress = `${mainMarker.getLatLng().lat.toFixed(5)}, ${mainMarker.getLatLng().lng.toFixed(5)}`;
+  address.value = currentAddress;
 });
 
 mainMarker.addTo(map);
 
-const advertisements = createAdvertisements();
-for (const advertisement of advertisements) {
-  const lat = advertisement.location.lat;
-  const lng = advertisement.location.lng;
+const setDefaultPosition = () => {
+  map.setView(
+    DEFAULT_COORDS,
+    START_ZOOM,
+  );
+  mainMarker.setLatLng(DEFAULT_COORDS);
+  address.value = DEFAULT_ADDRESS;
+};
+
+const drawAdvertisementsMarker = (popupData, locationData) => {
+  const lat = locationData.lat;
+  const lng = locationData.lng;
   const advertisementMarker = L.marker(
     {
       lat,
@@ -76,8 +87,7 @@ for (const advertisement of advertisements) {
     },
   );
   advertisementMarker.addTo(map);
-  advertisementMarker.bindPopup(
-    createAdvertisementsMarkup(advertisement),
-  );
-}
+  advertisementMarker.bindPopup(popupData);
+};
 
+export { setDefaultPosition, drawAdvertisementsMarker, DEFAULT_ADDRESS };
