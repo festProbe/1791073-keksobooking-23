@@ -1,5 +1,6 @@
 import { disableForm, enableForm } from './disable-enable-page.js';
-import { isEqualApartaments } from './filters.js';
+import { isEquailRoomNumber, isEqualApartaments, isEqualGuestsNumber, compareFeatures, isInPriceInterval } from './filters.js';
+import { debounce } from '../utils/debounce.js';
 
 const DEFAULT_COORDS = { lat: 35.652832, lng: 139.839478 };
 const START_ZOOM = 13;
@@ -23,6 +24,7 @@ const Settings = {
 };
 
 const SIMILAR_ADVERTISEMENT_COUNT = 10;
+const TIMEOUT_DELAY = 500;
 
 const TYPES_OF_APARTAMENTS = {
   flat: 'Квартира',
@@ -145,10 +147,15 @@ const createPopup = function ({ author, location, offer }) {
 
 const markerGroup = L.layerGroup().addTo(map);
 
-const renderAdvertisements = (advertisements) => {
+const renderAdvertisements = debounce((advertisements) => {
   markerGroup.clearLayers();
   advertisements
     .filter(isEqualApartaments)
+    .filter(isInPriceInterval)
+    .filter(isEquailRoomNumber)
+    .filter(isEqualGuestsNumber)
+    .slice()
+    .sort(compareFeatures)
     .slice(0, SIMILAR_ADVERTISEMENT_COUNT)
     .forEach(({ author, offer, location }) => {
       const lat = location.lat;
@@ -174,6 +181,6 @@ const renderAdvertisements = (advertisements) => {
     });
 
   markerGroup.addTo(map);
-};
+}, TIMEOUT_DELAY);
 
 export { setDefaultPosition, DEFAULT_ADDRESS, renderAdvertisements };
