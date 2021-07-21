@@ -66,4 +66,12 @@ const showErrorMessage = () => {
   }, TIMEOUT_TIMER);
 };
 
-export { showSuccessMessage, showErrorMessage, showAlertMessage };
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+export { showSuccessMessage, showErrorMessage, showAlertMessage, debounce };

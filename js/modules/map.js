@@ -1,6 +1,6 @@
 import { disableForm, enableForm } from './disable-enable-page.js';
 import { isEquailRoomNumber, isEqualApartaments, isEqualGuestsNumber, compareFeatures, isInPriceInterval } from './filters.js';
-import { debounce } from '../utils/debounce.js';
+import { debounce } from './utils.js';
 
 const DEFAULT_COORDS = { lat: 35.652832, lng: 139.839478 };
 const START_ZOOM = 13;
