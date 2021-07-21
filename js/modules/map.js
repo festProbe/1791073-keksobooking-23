@@ -1,4 +1,5 @@
 import { disableForm, enableForm } from './disable-enable-page.js';
+import { isEqualApartaments } from './filters.js';
 
 const DEFAULT_COORDS = { lat: 35.652832, lng: 139.839478 };
 const START_ZOOM = 13;
@@ -19,6 +20,16 @@ const Settings = {
     ICON_SIZE: [40, 40],
     ICON_ARCHOR: [20, 40],
   },
+};
+
+const SIMILAR_ADVERTISEMENT_COUNT = 10;
+
+const TYPES_OF_APARTAMENTS = {
+  flat: 'Квартира',
+  bungalow: 'Бунгало',
+  house: 'Дом',
+  palace: 'Дворец',
+  hotel: 'Отель',
 };
 
 const address = document.querySelector('#address');
@@ -74,20 +85,95 @@ const setDefaultPosition = () => {
   address.value = DEFAULT_ADDRESS;
 };
 
-const drawAdvertisementsMarker = (popupData, locationData) => {
-  const lat = locationData.lat;
-  const lng = locationData.lng;
-  const advertisementMarker = L.marker(
-    {
-      lat,
-      lng,
-    },
-    {
-      advertisementMarkerIcon,
-    },
-  );
-  advertisementMarker.addTo(map);
-  advertisementMarker.bindPopup(popupData);
+const advertisementTemplate = document.querySelector('#card')
+  .content
+  .querySelector('.popup');
+
+const createPopup = function ({ author, location, offer }) {
+  const cardItem = advertisementTemplate.cloneNode(true);
+
+  cardItem.querySelector('.popup__title').textContent = offer.title;
+
+  cardItem.querySelector('.popup__text--address').textContent = `${offer.address} (${location.lat.toFixed(5)} - ${location.lng.toFixed(5)})`;
+
+  cardItem.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
+
+  cardItem.querySelector('.popup__type').textContent = TYPES_OF_APARTAMENTS[offer.type];
+
+  cardItem.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
+
+  cardItem.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
+
+  if (offer.features) {
+    const features = offer.features.map((item) => `popup__feature--${item}`);
+    cardItem.querySelectorAll('.popup__feature').forEach((item) => {
+      const feature = item.classList[1];
+      if (!features.includes(feature)) {
+        item.remove();
+      }
+    });
+    if (Array.isArray(features) && features.length === 0) {
+      cardItem.querySelectorAll('.popup__feature').classList.add('hidden');
+    }
+  }
+
+  const description = cardItem.querySelector('.popup__description');
+  description.textContent = offer.description;
+  if (!offer.description) {
+    description.classList.add('hidden');
+  }
+
+  const photoSet = cardItem.querySelector('.popup__photos');
+  const photoItems = photoSet.querySelectorAll('.popup__photo');
+  if (offer.photos) {
+    const offerPhoto = offer.photos;
+    for (const item of offerPhoto) {
+      const photoItem = photoSet.querySelector('.popup__photo').cloneNode(true);
+      photoItem.classList.add('popup__photo');
+      photoItem.src = item;
+      photoItem.alt = offer.type;
+      photoSet.appendChild(photoItem);
+    }
+    photoItems[0].remove();
+    if (typeof (offerPhoto) !== undefined && offerPhoto !== null && offerPhoto.length > 0) {
+      photoSet.classList.add('hidden');
+    }
+  }
+  cardItem.querySelector('.popup__avatar').src = author.avatar;
+  return cardItem;
 };
 
-export { setDefaultPosition, drawAdvertisementsMarker, DEFAULT_ADDRESS };
+const markerGroup = L.layerGroup().addTo(map);
+
+const renderAdvertisements = (advertisements) => {
+  markerGroup.clearLayers();
+  advertisements
+    .filter(isEqualApartaments)
+    .slice(0, SIMILAR_ADVERTISEMENT_COUNT)
+    .forEach(({ author, offer, location }) => {
+      const lat = location.lat;
+      const lng = location.lng;
+      const advertisementMarker = L.marker(
+        {
+          lat,
+          lng,
+        },
+        {
+          advertisementMarkerIcon,
+        },
+      );
+
+      advertisementMarker.addTo(markerGroup);
+
+      advertisementMarker.bindPopup(
+        createPopup({ author, offer, location }),
+        {
+          keepInView: true,
+        },
+      );
+    });
+
+  markerGroup.addTo(map);
+};
+
+export { setDefaultPosition, DEFAULT_ADDRESS, renderAdvertisements };
