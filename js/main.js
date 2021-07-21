@@ -6,11 +6,9 @@ import { sendAdvertisement, clearForm } from './modules/advertisement-form.js';
 import { getData } from './modules/fetch.js';
 import { setApartamentType } from './modules/filters.js';
 
-
 getData((advertisements) => {
   renderAdvertisements(advertisements);
   setApartamentType(() => renderAdvertisements(advertisements));
 });
-
 
 sendAdvertisement(clearForm);

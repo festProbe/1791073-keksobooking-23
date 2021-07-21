@@ -18,4 +18,5 @@ const setApartamentType = (cb) => {
   });
 };
 
+
 export { setApartamentType, isEqualApartaments };
