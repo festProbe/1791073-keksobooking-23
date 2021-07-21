@@ -9,9 +9,9 @@ const TitleLength = {
 const MinPrice = {
   HOUSE_MIN_PRICE: 5000,
   BUNGALOW_MIN_PRICE: 0,
-  FLAT_MIN_PRICE: 3000,
+  FLAT_MIN_PRICE: 1000,
   PALACE_MIN_PRICE: 10000,
-  HOTEL_MIN_PRICE: 5000,
+  HOTEL_MIN_PRICE: 3000,
 };
 
 
@@ -60,6 +60,14 @@ const setDefaultFormSettings = () => {
       option.selected = true;
     }
   }
+
+  for (const item of capacityValues) {
+    item.disabled = true;
+    if (item.value === '1') {
+      item.disabled = false;
+    }
+  }
+
   for (const option of featureOptions) {
     option.checked = false;
   }

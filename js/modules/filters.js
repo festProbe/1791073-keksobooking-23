@@ -61,7 +61,7 @@ const isEquailRoomNumber = (advertisement) => {
 };
 
 const isEqualGuestsNumber = (advertisement) => {
-  if (guestsSelect.value === advertisement.offer.rooms.toString() || guestsSelect.value === 'any') {
+  if (guestsSelect.value === advertisement.offer.guests.toString() || guestsSelect.value === 'any') {
     return true;
   }
   return false;
