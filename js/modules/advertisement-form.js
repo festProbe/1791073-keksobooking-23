@@ -30,6 +30,11 @@ const capacityValues = capacitySelect.querySelectorAll('option');
 const featureOptions = document.querySelectorAll('.features > input');
 const resetButton = document.querySelector('.ad-form__reset');
 const description = document.querySelector('#description');
+const apartamentSelect = document.querySelector('#housing-type');
+const priceSelect = document.querySelector('#housing-price');
+const roomsSelect = document.querySelector('#housing-rooms');
+const guestsSelect = document.querySelector('#housing-guests');
+const featuresList = document.querySelectorAll('.map__checkbox');
 
 const setDefaultFormSettings = () => {
   advertisementTitleInput.value = '';
@@ -57,6 +62,14 @@ const setDefaultFormSettings = () => {
   }
   for (const option of featureOptions) {
     option.checked = false;
+  }
+
+  apartamentSelect.value = 'any';
+  priceSelect.value = 'any';
+  roomsSelect.value = 'any';
+  guestsSelect.value = 'any';
+  for (const feature of featuresList) {
+    feature.checked = false;
   }
 };
 

@@ -1,7 +1,5 @@
 const TIMEOUT_TIMER = 4000;
 
-const form = document.querySelector('.ad-form');
-
 const successMessageTemplate = document.querySelector('#success')
   .content
   .querySelector('.success');
@@ -11,19 +9,6 @@ const errorMessageTemplate = document.querySelector('#error')
   .content
   .querySelector('.error');
 const errorMessage = errorMessageTemplate.cloneNode(true);
-
-const onMessageEscKeydown = (evt) => {
-  if (evt.key === 'Escape' || evt.key === 'Esc') {
-    successMessage.remove();
-    errorMessage.remove();
-    document.removeEventListener('keydown', onMessageEscKeydown);
-  }
-};
-
-const removeMessage = (message) => {
-  message.remove();
-  document.removeEventListener('keydown', onMessageEscKeydown);
-};
 
 const showAlertMessage = (error) => {
   const alertContainer = document.createElement('div');
@@ -46,24 +31,56 @@ const showAlertMessage = (error) => {
   }, TIMEOUT_TIMER);
 };
 
+const onMessageEscKeydown = (evt) => {
+  if (evt.key === 'Escape' || evt.key === 'Esc') {
+    // eslint-disable-next-line no-use-before-define
+    removeMessage(successMessage);
+    // eslint-disable-next-line no-use-before-define
+    removeMessage(errorMessage);
+  }
+};
+
+const onMessageClick = () => {
+  // eslint-disable-next-line no-use-before-define
+  removeMessage(successMessage);
+  // eslint-disable-next-line no-use-before-define
+  removeMessage(errorMessage);
+};
+
+const removeMessage = (message) => {
+  message.remove();
+  document.removeEventListener('keydown', onMessageEscKeydown);
+  document.removeEventListener('click', onMessageClick);
+};
+
 const showSuccessMessage = () => {
-  form.append(successMessage);
+  document.body.append(successMessage);
   document.addEventListener('keydown', onMessageEscKeydown);
+  document.addEventListener('click', onMessageClick);
   setTimeout(() => {
     removeMessage(successMessage);
   }, TIMEOUT_TIMER);
 };
 
 const showErrorMessage = () => {
-  form.append(errorMessage);
+  document.body.append(errorMessage);
   const tryAgainButton = errorMessage.querySelector('.error__button');
   tryAgainButton.addEventListener('click', () => {
     removeMessage(errorMessage);
   });
   document.addEventListener('keydown', onMessageEscKeydown);
+  document.addEventListener('click', onMessageClick);
   setTimeout(() => {
     removeMessage(errorMessage);
   }, TIMEOUT_TIMER);
 };
 
-export { showSuccessMessage, showErrorMessage, showAlertMessage };
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+export { showSuccessMessage, showErrorMessage, showAlertMessage, debounce };

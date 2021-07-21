@@ -1,14 +1,18 @@
 import './modules/map.js';
 import './modules/advertisement-form.js';
 import './modules/fetch.js';
-import { createPopups } from './modules/create-popups.js';
+import { renderAdvertisements } from './modules/map.js';
 import { sendAdvertisement, clearForm } from './modules/advertisement-form.js';
 import { getData } from './modules/fetch.js';
-
-const SIMILAR_ADVERTISEMENT_COUNT = 10;
+import { setApartamentType, setFutures, setGuestsNumber, setPriceInterval, setRoomNunber } from './modules/filters.js';
 
 getData((advertisements) => {
-  createPopups(advertisements.slice(0, SIMILAR_ADVERTISEMENT_COUNT));
+  renderAdvertisements(advertisements);
+  setApartamentType(() => renderAdvertisements(advertisements));
+  setPriceInterval(() => renderAdvertisements(advertisements));
+  setRoomNunber(() => renderAdvertisements(advertisements));
+  setGuestsNumber(() => renderAdvertisements(advertisements));
+  setFutures(() => renderAdvertisements(advertisements));
 });
 
 sendAdvertisement(clearForm);
