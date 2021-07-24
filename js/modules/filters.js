@@ -9,6 +9,15 @@ const guestsNumberOptions = guestsSelect.querySelectorAll('option');
 const featuresFieldset = document.querySelector('#housing-features');
 const featuresList = featuresFieldset.querySelectorAll('[name="features"]');
 
+const PriceIntervals = {
+  LOW: 10000,
+  HIGH: 50000,
+};
+
+const ALL_APARTAMENT_TYPES_FILTER = 'any';
+const ALL_ROOMS_TYPES_FILTER = 'any';
+const ALL_GUESTS_TYPE_FILTER = 'any';
+
 const getFeaturesRank = (advertisement) => {
   let rank = 0;
   const features = advertisement.offer.features;
@@ -32,7 +41,7 @@ const compareFeatures = (advertisementA, advertisementB) => {
 };
 
 const isEqualApartaments = (advertisement) => {
-  if (apartamentSelect.value === advertisement.offer.type || apartamentSelect.value === 'any') {
+  if (apartamentSelect.value === advertisement.offer.type || apartamentSelect.value === ALL_APARTAMENT_TYPES_FILTER) {
     return true;
   }
   return false;
@@ -43,25 +52,25 @@ const isInPriceInterval = (advertisement) => {
     case 'any':
       return true;
     case 'middle':
-      return advertisement.offer.price >= 10000 && advertisement.offer.price <= 50000;
+      return advertisement.offer.price >= PriceIntervals.LOW && advertisement.offer.price <= PriceIntervals.HIGH;
     case 'low':
-      return advertisement.offer.price < 10000;
+      return advertisement.offer.price < PriceIntervals.LOW;
     case 'high':
-      return advertisement.offer.price > 50000;
+      return advertisement.offer.price > PriceIntervals.HIGH;
     default:
       return false;
   }
 };
 
 const isEquailRoomNumber = (advertisement) => {
-  if (roomsSelect.value === advertisement.offer.rooms.toString() || roomsSelect.value === 'any') {
+  if (roomsSelect.value === advertisement.offer.rooms.toString() || roomsSelect.value === ALL_ROOMS_TYPES_FILTER) {
     return true;
   }
   return false;
 };
 
 const isEqualGuestsNumber = (advertisement) => {
-  if (guestsSelect.value === advertisement.offer.guests.toString() || guestsSelect.value === 'any') {
+  if (guestsSelect.value === advertisement.offer.guests.toString() || guestsSelect.value === ALL_GUESTS_TYPE_FILTER) {
     return true;
   }
   return false;

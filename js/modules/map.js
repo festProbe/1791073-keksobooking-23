@@ -1,4 +1,4 @@
-import { disableForm, enableForm } from './disable-enable-page.js';
+import { setFormActivity } from './disable-enable-page.js';
 import { isEquailRoomNumber, isEqualApartaments, isEqualGuestsNumber, compareFeatures, isInPriceInterval } from './filters.js';
 import { debounce } from './utils.js';
 
@@ -26,21 +26,20 @@ const Settings = {
 const SIMILAR_ADVERTISEMENT_COUNT = 10;
 const TIMEOUT_DELAY = 500;
 
-const TYPES_OF_APARTAMENTS = {
-  flat: 'Квартира',
-  bungalow: 'Бунгало',
-  house: 'Дом',
-  palace: 'Дворец',
-  hotel: 'Отель',
+const TypesOfApartaments = {
+  FLAT: 'Квартира',
+  BUNGALOW: 'Бунгало',
+  HOUSE: 'Дом',
+  PALACE: 'Дворец',
+  HOTEL: 'Отель',
 };
 
 const address = document.querySelector('#address');
 address.value = DEFAULT_ADDRESS;
 
-disableForm();
 const map = L.map('map-canvas')
   .on('load', () => {
-    enableForm();
+    setFormActivity();
   })
   .setView(Settings.MapSettings.DEFAULT_COORDS, Settings.MapSettings.START_ZOOM);
 
@@ -100,7 +99,7 @@ const createPopup = function ({ author, location, offer }) {
 
   cardItem.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
 
-  cardItem.querySelector('.popup__type').textContent = TYPES_OF_APARTAMENTS[offer.type];
+  cardItem.querySelector('.popup__type').textContent = TypesOfApartaments[offer.type];
 
   cardItem.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
 
@@ -126,21 +125,19 @@ const createPopup = function ({ author, location, offer }) {
   }
 
   const photoSet = cardItem.querySelector('.popup__photos');
-  const photoItems = photoSet.querySelectorAll('.popup__photo');
   if (offer.photos) {
-    const offerPhoto = offer.photos;
-    for (const item of offerPhoto) {
+    const offerPhotos = offer.photos;
+    for (const item of offerPhotos) {
       const photoItem = photoSet.querySelector('.popup__photo').cloneNode(true);
       photoItem.classList.add('popup__photo');
       photoItem.src = item;
       photoItem.alt = offer.type;
       photoSet.appendChild(photoItem);
     }
-    photoItems[0].remove();
-    if (typeof (offerPhoto) !== undefined && offerPhoto !== null && offerPhoto.length > 0) {
-      photoSet.classList.add('hidden');
-    }
   }
+  const photoItems = photoSet.querySelectorAll('.popup__photo');
+  photoItems[0].remove();
+
   cardItem.querySelector('.popup__avatar').src = author.avatar;
   return cardItem;
 };
@@ -150,11 +147,7 @@ const markerGroup = L.layerGroup().addTo(map);
 const renderAdvertisements = debounce((advertisements) => {
   markerGroup.clearLayers();
   advertisements
-    .filter(isEqualApartaments)
-    .filter(isInPriceInterval)
-    .filter(isEquailRoomNumber)
-    .filter(isEqualGuestsNumber)
-    .slice()
+    .filter(isEqualApartaments && isInPriceInterval && isEquailRoomNumber && isEqualGuestsNumber)
     .sort(compareFeatures)
     .slice(0, SIMILAR_ADVERTISEMENT_COUNT)
     .forEach(({ author, offer, location }) => {

@@ -1,4 +1,5 @@
 import './modules/map.js';
+import './modules/photoPreview.js';
 import './modules/advertisement-form.js';
 import './modules/fetch.js';
 import { renderAdvertisements } from './modules/map.js';

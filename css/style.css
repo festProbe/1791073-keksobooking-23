@@ -578,14 +578,24 @@ fieldset {
 }
 
 .ad-form__photo {
+  display: inline-block;
+  vertical-align: top;
   margin-right: 10px;
   margin-bottom: 10px;
-
-  width: 70px;
-  height: 70px;
+  margin-top: 5px;
 
   background-color: #e4e4de;
   border-radius: 5px;
+}
+
+.ad-form__photo--element {
+  display: inline;
+  margin-right: 10px;
+  width: 55px;
+  height: 70px;
+}
+.ad-form__photo--element:last-child {
+  margin-right: 0;
 }
 
 .ad-form__element--submit {
